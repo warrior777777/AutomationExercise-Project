@@ -15,7 +15,7 @@ public class TC01_RegisterUser extends BaseTest {
             .navigateToLoginPage();
     loginSignupPage
             .nameSignup("Testing")
-            .emailSignup("test7.script@gmail.com")
+            .emailSignup("test7.script7@gmail.com")
             .signupButton()
             .clickGender()
             .typePassword("Test12345!")

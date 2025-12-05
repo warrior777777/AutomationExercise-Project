@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import project_automationexercise.utils.AllureAttachment;
 
@@ -20,7 +21,7 @@ public class BaseTest {
 
     @BeforeMethod
     @Parameters({"browser"})
-    public void setUp(String browser) {
+    public void setUp(@Optional("edge") String browser) {
         boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless"));
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();

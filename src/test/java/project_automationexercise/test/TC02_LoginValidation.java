@@ -27,7 +27,7 @@ public class TC02_LoginValidation extends BaseTest {
                 .navigateToLoginPage();
         loginSignupPage
                 .withEmail("wrong_email@test.com")
-                .withPassword("Test12345!")
+                .withPassword("Test12345")
                 .login()
                 .errorMessage();
     }

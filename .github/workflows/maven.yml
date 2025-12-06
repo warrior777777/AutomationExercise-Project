@@ -1,18 +1,36 @@
-name: Automation Exercise CI
+name: Automation Exercise CI & Allure Report
 
 on:
   push:
     branches: [ "main", "master" ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
   pull_request:
     branches: [ "main", "master" ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  test-execution:
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -21,13 +39,64 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run Tests (Headless Mode)
-        run: mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dbrowser=chrome -Dheadless=true
+      - name: Download Allure History
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
 
-      - name: Upload Allure Results
+      - name: Run Tests (Chrome Headless)
+        id: run_tests
+        continue-on-error: true
+        run: |
+          mvn clean test \
+            -Dsurefire.suiteXmlFiles=testng.xml \
+            -Dheadless=true
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: gh-pages
+          keep_reports: 30
+
+      - name: Upload Allure Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
-          path: allure-results
-          retention-days: 5
+          name: allure-report-final
+          path: allure-report
+          retention-days: 10
+
+      - name: Check Final Test Status
+        if: steps.run_tests.outcome == 'failure'
+        run: |
+          echo "❌ Tests Failed! Marking the job as failed."
+          exit 1
+
+  deploy:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: write
+
+    steps:
+      - name: Download Allure Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report-final
+          path: allure-report
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+          force_orphan: false

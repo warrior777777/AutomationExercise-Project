@@ -79,7 +79,7 @@ jobs:
 
   deploy:
     needs: test
-    if: always(
+    if: always()
     runs-on: ubuntu-latest
     permissions:
       pages: write

@@ -24,7 +24,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
 
     steps:
       - name: Checkout Code
@@ -51,7 +51,7 @@ jobs:
         id: run_tests
         continue-on-error: true
         run: |
-          mvn clean test \
+          mvn clean test -B \
             -Dsurefire.suiteXmlFiles=testng.xml \
             -Dheadless=true
 
@@ -73,9 +73,7 @@ jobs:
 
       - name: Check Final Test Status
         if: steps.run_tests.outcome == 'failure'
-        run: |
-          echo "❌ Tests Failed! Marking the job as failed."
-          exit 1
+        run: exit 1
 
   deploy:
     needs: test
@@ -100,3 +98,5 @@ jobs:
           publish_branch: gh-pages
           publish_dir: allure-report
           force_orphan: false
+
+

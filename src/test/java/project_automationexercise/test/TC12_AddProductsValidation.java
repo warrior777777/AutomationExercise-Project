@@ -18,12 +18,12 @@ public class TC12_AddProductsValidation extends BaseTest {
         productsPage
                 .navigateToProductsPage()
                 .addFirstProductToCart()
-                .verifyAddedProduct()
+                .verifyAddedProductAndContinue()
                 .clickViewCart();
 
         cartPage
                 .verifyCartPageVisible()
-                .verifyCartHasItem();
+                .verifyCartHasItem(1);
     }
 
     @Test(priority = 2, description = "Negative: Verify Cart is Empty Initially")
@@ -62,7 +62,7 @@ public class TC12_AddProductsValidation extends BaseTest {
         productsPage
                 .navigateToProductsPage()
                 .addFirstProductToCart()
-                .verifyAddedProduct()
+                .verifyAddedProductAndContinue()
                 .verifyAllProductsPageVisible();
     }
 }

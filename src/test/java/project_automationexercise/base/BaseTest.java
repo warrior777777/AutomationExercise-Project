@@ -17,51 +17,73 @@ import project_automationexercise.utils.AllureAttachment;
 import java.time.Duration;
 
 public class BaseTest {
+
+    private static final ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
+
     protected WebDriver driver;
+
+    public WebDriver getDriver() {
+        return tlDriver.get();
+    }
 
     @BeforeMethod
     @Parameters({"browser"})
     public void setUp(@Optional("edge") String browser) {
+        WebDriver currentDriver;
         boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless"));
+
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
                 options.addArguments("--headless=new");
                 options.addArguments("--window-size=1920,1080");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
             }
-            driver = new ChromeDriver(options);
+            currentDriver = new ChromeDriver(options);
+
         } else if (browser.equalsIgnoreCase("firefox")) {
             FirefoxOptions options = new FirefoxOptions();
             if (isHeadless) {
                 options.addArguments("-headless");
                 options.addArguments("--window-size=1920,1080");
             }
-            driver = new FirefoxDriver(options);
+            currentDriver = new FirefoxDriver(options);
+
         } else {
             EdgeOptions options = new EdgeOptions();
             if (isHeadless) {
                 options.addArguments("--headless=new");
                 options.addArguments("--window-size=1920,1080");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
             }
-            driver = new EdgeDriver(options);
+            currentDriver = new EdgeDriver(options);
         }
 
-        AllureAttachment.setDriver(driver);
+        tlDriver.set(currentDriver);
+
+        this.driver = currentDriver;
+
+        AllureAttachment.setDriver(getDriver());
 
         if (!isHeadless) {
-            driver.manage().window().maximize();
+            getDriver().manage().window().maximize();
         }
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get("https://automationexercise.com/");
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        getDriver().get("https://automationexercise.com/");
     }
+
     @AfterMethod
     public void tearDown(ITestResult result) {
+        WebDriver driver = tlDriver.get();
         if (ITestResult.FAILURE == result.getStatus()) {
             AllureAttachment.addScreenshot("Screenshot Failure - " + result.getName());
         }
         if (driver != null) {
             driver.quit();
         }
+        tlDriver.remove();
     }
 }

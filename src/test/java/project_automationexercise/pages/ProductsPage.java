@@ -6,18 +6,19 @@ import project_automationexercise.base.BasePage;
 
 public class ProductsPage extends BasePage {
 
-    private final By PRODUCTS_BTN             = By.cssSelector("a[href='/products']");
-    private final By ALL_PRODUCTS_HEADER      = By.xpath("//h2[contains(text(), 'All Products')]");
-    private final By SEARCH_FIELD             = By.cssSelector("#search_product");
-    private final By SEARCH_BTN               = By.cssSelector("#submit_search");
+    private final By PRODUCTS_BTN = By.cssSelector("a[href='/products']");
+    private final By ALL_PRODUCTS_HEADER = By.xpath("//h2[contains(text(), 'All Products')]");
+    private final By SEARCH_FIELD = By.cssSelector("#search_product");
+    private final By SEARCH_BTN = By.cssSelector("#submit_search");
     private final By SEARCHED_PRODUCTS_HEADER = By.xpath("//h2[contains(text(), 'Searched Products')]");
-    private final By PRODUCT_LIST_ITEMS       = By.cssSelector(".features_items .col-sm-4");
-    private final By FIRST_PRODUCT_ADD_BTN    = By.xpath("(//a[contains(text(),'Add to cart')])[1]");
-    private final By FIRST_PRODUCT_VIEW_BTN   = By.cssSelector("a[href='/product_details/1']");
-    private final By CONTINUE_SHOPPING_BTN    = By.cssSelector(".btn.btn-success.close-modal");
-    private final By VIEW_CART_LINK           = By.cssSelector("a[href='/view_cart']");
-    private final By MAIN_MENU_CART_BTN       = By.cssSelector("li a[href='/view_cart']");
-    private final By VERIFY_MESSAGE_ADD_CART  = By.cssSelector(".modal-content");
+    private final By PRODUCT_LIST_ITEMS = By.cssSelector(".features_items .col-sm-4");
+    private final By FIRST_PRODUCT_ADD_BTN = By.xpath("(//a[contains(text(),'Add to cart')])[1]");
+    private final By FIRST_PRODUCT_VIEW_BTN = By.cssSelector("a[href='/product_details/1']");
+    private final By SECOND_PRODUCT_ADD_BTN = By.cssSelector("a.add-to-cart[data-product-id='30']");
+    private final By CONTINUE_SHOPPING_BTN = By.cssSelector(".btn.btn-success.close-modal");
+    private final By VIEW_CART_BTN = By.cssSelector(".modal-body a[href='/view_cart']");
+    private final By MAIN_MENU_CART_BTN = By.cssSelector("li a[href='/view_cart']");
+    private final By VERIFY_MESSAGE_ADD_CART = By.cssSelector(".modal-content");
 
 
     public ProductsPage(WebDriver driver) {
@@ -55,19 +56,31 @@ public class ProductsPage extends BasePage {
         clickWithScrollJS(FIRST_PRODUCT_ADD_BTN);
         return this;
     }
+
     public ProductsPage clickFirstProductView() {
-        clickWithJS(FIRST_PRODUCT_VIEW_BTN);
+        clickAndScrollWithJS(FIRST_PRODUCT_VIEW_BTN);
         return this;
     }
 
-    public ProductsPage verifyAddedProduct() {
+    public ProductsPage verifyAddedProductAndContinue() {
         assertVisible(VERIFY_MESSAGE_ADD_CART, "verify message is not visible");
         clickWhenReady(CONTINUE_SHOPPING_BTN);
         return this;
     }
 
+    public ProductsPage verifyAddedProductAndViewCart() {
+        assertVisible(VERIFY_MESSAGE_ADD_CART, "verify message is not visible");
+        clickJS(VIEW_CART_BTN);
+        return this;
+    }
+
+
     public ProductsPage clickViewCart() {
-        clickWhenReady(VIEW_CART_LINK);
+        clickWhenReady(VIEW_CART_BTN);
+        return this;
+    }
+    public ProductsPage addSecondProductToCart() {
+        clickWithScrollJS(SECOND_PRODUCT_ADD_BTN);
         return this;
     }
 

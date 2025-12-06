@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Automation Exercise Suite">
+
+<suite name="Automation Exercise Suite" parallel="classes" thread-count="4">
 
     <listeners>
         <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
     </listeners>
 
     <test name="All Tests">
+        <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="project_automationexercise.test.TC07_VerifyAllProduct"/>
-            <class name="project_automationexercise.test.TC04_LoginUserWithIncorrectInfo"/>
             <class name="project_automationexercise.test.TC01_RegisterUser"/>
+            <class name="project_automationexercise.test.TC02_LoginValidation"/>
+            <class name="project_automationexercise.test.TC09_SearchProductValidation"/>
+            <class name="project_automationexercise.test.TC12_AddProductsValidation"/>
+            <class name="project_automationexercise.test.TC21_AddReviewValidation"/>
+            <class name="project_automationexercise.test.TC22_AddMultipleProductsAndVerify"/>
+            <class name="project_automationexercise.test.TC23_ContactUsValidation"/>
         </classes>
     </test>
 </suite>

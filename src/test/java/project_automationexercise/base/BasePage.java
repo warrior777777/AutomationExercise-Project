@@ -36,6 +36,7 @@ public class BasePage {
         Select select = new Select(dropdownElement);
         select.selectByVisibleText(visibleText);
     }
+
     public void typeText(By locator, String text) {
         WebElement field = wait.until(ExpectedConditions.elementToBeClickable(locator));
         field.clear();
@@ -49,20 +50,41 @@ public class BasePage {
     public void takeScreenshot(String name) {
         AllureAttachment.addScreenshot(name + " - " + LocalDateTime.now());
     }
-    public void  assertElementCount(By locator, int expectedCount, String message){
+
+    public void assertelementCount(By locator, int expectedCount, String message) {
         List<WebElement> elements = driver.findElements(locator);
         Assert.assertEquals(elements.size(), expectedCount, message);
     }
-    public void clickWithScrollJS (By locator) {
+
+    public void assertElementCount(By locator, int expectedCount, String message) {
+        wait.until(driver -> {
+            List<WebElement> elements = driver.findElements(locator);
+            return elements.size() == expectedCount;
+        });
+        List<WebElement> elements = driver.findElements(locator);
+        int actualCount = elements.size();
+        Assert.assertEquals(actualCount, expectedCount,
+                message + " Expected: " + expectedCount + " Actual: " + actualCount);
+    }
+
+    public void clickJS(By locator) {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});",element);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+
+    }
+
+    public void clickWithScrollJS(By locator) {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
         wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
-    public void clickWithJS(By locator) {
+
+    public void clickAndScrollWithJS(By locator) {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
+
     public void scrollAndClick(By locator) {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
         new Actions(driver)
@@ -70,10 +92,16 @@ public class BasePage {
                 .click()
                 .perform();
     }
+
     public String getValidationMessage(By locator) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator))
                 .getAttribute("validationMessage");
     }
+
+    public void alertConfirm() {
+        wait.until(ExpectedConditions.alertIsPresent()).accept();
+    }
+
     public void verifyFieldIsRequiredErrorMessage(By locator) {
         String message = getValidationMessage(locator);
         Assert.assertFalse(message.isEmpty(), "Expected validation message for " + locator + " but found none.");

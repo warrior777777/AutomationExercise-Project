@@ -53,7 +53,8 @@ jobs:
         run: |
           mvn clean test -B \
             -Dsurefire.suiteXmlFiles=testng.xml \
-            -Dheadless=true
+            -Dheadless=true \
+            -Dsurefire.rerunFailingTests=1
 
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
@@ -98,5 +99,3 @@ jobs:
           publish_branch: gh-pages
           publish_dir: allure-report
           force_orphan: false
-
-

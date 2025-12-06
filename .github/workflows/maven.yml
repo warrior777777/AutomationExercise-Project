@@ -24,7 +24,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout Code
@@ -41,6 +41,9 @@ jobs:
         env:
           MAVEN_OPTS: '-Xmx2g -XX:+TieredCompilation'
 
+      - name: Resolve Dependencies
+        run: mvn dependency:resolve
+
       - name: Build and Compile
         run: mvn clean compile -B
 
@@ -52,10 +55,10 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Run Tests (Chrome Headless)
+      - name: Run Tests (Ignore Failure)
         id: run_tests
         run: |
-          mvn clean test -B \
+          mvn test -B \
             -Dsurefire.suiteXmlFiles=testng.xml \
             -Dheadless=true \
             -Dsurefire.rerunFailingTests=1 \

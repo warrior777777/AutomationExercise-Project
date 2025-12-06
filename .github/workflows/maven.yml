@@ -32,12 +32,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 21
+      - name: Set up JDK 21 and Maven Memory
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+          maven-opts: '-Xmx2g -XX:+TieredCompilation'
+
+      - name: Build and Compile
+        run: mvn clean compile -B
 
       - name: Download Allure History
         uses: actions/checkout@v4
@@ -64,11 +68,11 @@ jobs:
           allure_history: gh-pages
           keep_reports: 30
 
-      - name: Upload Allure Report Artifact
+      - name: Upload Report Artifacts (Final Output)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-final
+          name: allure-data
           path: allure-report
           retention-days: 10
 
@@ -89,13 +93,13 @@ jobs:
       - name: Download Allure Report Artifact
         uses: actions/download-artifact@v4
         with:
-          name: allure-report-final
-          path: allure-report
+          name: allure-data
+          path: deploy-report
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-report
-          force_orphan: false
+          publish_dir: deploy-report/allure-report
+          force_orphan: true

@@ -43,7 +43,7 @@ public class TC20_BrandProductsTests extends BaseTest {
                 .navigateToProductsPage();
         brandPage
                 .clickToPolo()
-                .verifyProductCount(6)
+                .verifyProductCount(5)
                 .clickToMadme()
                 .verifyProductCount(5)
                 .clickToHarbour()

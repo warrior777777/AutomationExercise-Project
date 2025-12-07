@@ -3,10 +3,6 @@
 
 <suite name="Automation Exercise Suite" parallel="classes" thread-count="4">
 
-    <listeners>
-        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
-    </listeners>
-
     <test name="All Tests">
         <parameter name="browser" value="chrome"/>
         <classes>

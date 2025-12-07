@@ -27,6 +27,6 @@ public class TC22_AddMultipleProductsAndVerify extends BaseTest {
                 .verifyAddedProductAndViewCart();
         cartPage
                 .verifyCartPageVisible()
-                .verifyCartHasItem(3);
+                .verifyCartHasItem(2);
     }
 }

@@ -29,7 +29,7 @@ public class BrandPage extends BasePage {
     }
 
     public BrandPage clickToMadme() {
-        clickWhenReady(MADME_BRAND_BTN);
+        clickJS(MADME_BRAND_BTN);
         return this;
     }
 

@@ -18,8 +18,8 @@ public class TC12_AddProductsValidation extends BaseTest {
         productsPage
                 .navigateToProductsPage()
                 .addFirstProductToCart()
-                .verifyAddedProductAndContinue()
-                .clickViewCart();
+                .verifyAddedProductAndViewCart();
+
 
         cartPage
                 .verifyCartPageVisible()

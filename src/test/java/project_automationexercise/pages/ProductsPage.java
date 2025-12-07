@@ -16,7 +16,7 @@ public class ProductsPage extends BasePage {
     private final By FIRST_PRODUCT_VIEW_BTN = By.cssSelector("a[href='/product_details/1']");
     private final By SECOND_PRODUCT_ADD_BTN = By.cssSelector("a.add-to-cart[data-product-id='30']");
     private final By CONTINUE_SHOPPING_BTN = By.cssSelector(".btn.btn-success.close-modal");
-    private final By VIEW_CART_BTN = By.cssSelector(".modal-body a[href='/view_cart']");
+    private final By VIEW_CART_BTN = By.xpath("//p[@class='text-center']/a[@href='/view_cart']");
     private final By MAIN_MENU_CART_BTN = By.cssSelector("li a[href='/view_cart']");
     private final By VERIFY_MESSAGE_ADD_CART = By.cssSelector(".modal-content");
 
@@ -70,7 +70,7 @@ public class ProductsPage extends BasePage {
 
     public ProductsPage verifyAddedProductAndViewCart() {
         assertVisible(VERIFY_MESSAGE_ADD_CART, "verify message is not visible");
-        clickJS(VIEW_CART_BTN);
+        clickWhenReady(VIEW_CART_BTN);
         return this;
     }
 

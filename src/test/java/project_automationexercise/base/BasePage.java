@@ -30,6 +30,14 @@ public class BasePage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         Assert.assertTrue(driver.findElement(locator).isDisplayed(), message);
     }
+    public void assertNotVisible(By locator, String message) {
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementLocated(locator)), message);
+    }
+
+    public void assertTextNotContains(By locator, String unexpectedText, String message) {
+        String actualText = wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText();
+        Assert.assertFalse(actualText.contains(unexpectedText), message);
+    }
 
     public void selectFromList(By locator, String visibleText) {
         WebElement dropdownElement = driver.findElement(locator);
@@ -49,11 +57,6 @@ public class BasePage {
 
     public void takeScreenshot(String name) {
         AllureAttachment.addScreenshot(name + " - " + LocalDateTime.now());
-    }
-
-    public void assertelementCount(By locator, int expectedCount, String message) {
-        List<WebElement> elements = driver.findElements(locator);
-        Assert.assertEquals(elements.size(), expectedCount, message);
     }
 
     public void assertElementCount(By locator, int expectedCount, String message) {

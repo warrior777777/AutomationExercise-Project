@@ -6,7 +6,7 @@ import project_automationexercise.base.BasePage;
 
 public class ProductsPage extends BasePage {
 
-    private final By PRODUCTS_BTN = By.cssSelector("a[href='/products']");
+    private final By navigateToProductsPage = By.cssSelector("a[href='/products']");
     private final By ALL_PRODUCTS_HEADER = By.xpath("//h2[contains(text(), 'All Products')]");
     private final By SEARCH_FIELD = By.cssSelector("#search_product");
     private final By SEARCH_BTN = By.cssSelector("#submit_search");
@@ -26,7 +26,7 @@ public class ProductsPage extends BasePage {
     }
 
     public ProductsPage navigateToProductsPage() {
-        clickWhenReady(PRODUCTS_BTN);
+        clickWhenReady(navigateToProductsPage);
         return this;
     }
 

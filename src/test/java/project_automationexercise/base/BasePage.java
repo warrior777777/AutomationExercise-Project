@@ -1,9 +1,6 @@
 package project_automationexercise.base;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -14,7 +11,7 @@ import project_automationexercise.utils.AllureAttachment;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 public class BasePage {
     protected WebDriver driver;
@@ -30,13 +27,20 @@ public class BasePage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         Assert.assertTrue(driver.findElement(locator).isDisplayed(), message);
     }
+
     public void assertNotVisible(By locator, String message) {
         Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementLocated(locator)), message);
+    }
+
+    public void hoverOverElement(By locator) {
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        new Actions(driver).moveToElement(element).perform();
     }
 
     public void assertTextNotContains(By locator, String unexpectedText, String message) {
         String actualText = wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText();
         Assert.assertFalse(actualText.contains(unexpectedText), message);
+
     }
 
     public void selectFromList(By locator, String visibleText) {
@@ -55,19 +59,32 @@ public class BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
 
+    public void assertTextContain(By locator, String expectedText) {
+        try {
+            wait.until(ExpectedConditions.textToBePresentInElementLocated(locator, expectedText));
+        } catch (TimeoutException e) {
+            String actualText = driver.findElement(locator).getText();
+            String errorMessage = String.format(
+                    "Text mismatch for element defined by [%s]. Expected to contain: [%s], but found: [%s]",
+                    locator.toString(), expectedText, actualText);
+            Assert.fail(errorMessage);
+        }
+    }
+
     public void takeScreenshot(String name) {
         AllureAttachment.addScreenshot(name + " - " + LocalDateTime.now());
     }
 
-    public void assertElementCount(By locator, int expectedCount, String message) {
-        wait.until(driver -> {
-            List<WebElement> elements = driver.findElements(locator);
-            return elements.size() == expectedCount;
-        });
-        List<WebElement> elements = driver.findElements(locator);
-        int actualCount = elements.size();
-        Assert.assertEquals(actualCount, expectedCount,
-                message + " Expected: " + expectedCount + " Actual: " + actualCount);
+    public void assertElementCount(By locator, int expectedCount, String elementName) {
+        try {
+            wait.until(ExpectedConditions.numberOfElementsToBe(locator, expectedCount));
+        } catch (TimeoutException e) {
+            int actualCount = driver.findElements(locator).size();
+            String errorMessage = String.format(
+                    "Element count mismatch for '%s' (Locator: %s). Expected: %d, but found: %d",
+                    elementName, locator.toString(), expectedCount, actualCount);
+            Assert.fail(errorMessage);
+        }
     }
 
     public void clickJS(By locator) {

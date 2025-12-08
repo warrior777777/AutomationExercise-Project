@@ -43,12 +43,13 @@ public class LoginSignupPage extends BasePage {
     private final By SIGNUP_BUTTON_CHECK = By.cssSelector("a[href='/login']");
 
 
-    public void navigateToLoginPage() {
-        clickWhenReady(LOGIN_SIGNUP_BTN);
-    }
-
     public LoginSignupPage(WebDriver driver) {
         super(driver);
+    }
+
+    public LoginSignupPage navigateToLoginPage() {
+        clickWhenReady(LOGIN_SIGNUP_BTN);
+        return this;
     }
 
     public LoginSignupPage withEmail(String email) {

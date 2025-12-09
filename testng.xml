@@ -11,10 +11,11 @@
             <class name="project_automationexercise.test.TC09_SearchProductValidation"/>
             <class name="project_automationexercise.test.TC12_AddProductsValidation"/>
             <class name="project_automationexercise.test.TC18_ViewCategoryProducts"/>
-            <class name="project_automationexercise.test.TC20_BrandProductsTests"/>
+            <class name="project_automationexercise.test.TC20_ViewBrandProducts"/>
             <class name="project_automationexercise.test.TC21_AddReviewValidation"/>
             <class name="project_automationexercise.test.TC22_AddMultipleProductsAndVerify"/>
             <class name="project_automationexercise.test.TC23_ContactUsValidation"/>
+            <class name="project_automationexercise.test.TC24_PlaceOrderVaildation"/>
         </classes>
     </test>
 </suite>

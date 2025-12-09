@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 import project_automationexercise.base.BaseTest;
 import project_automationexercise.pages.*;
 
-public class TC21_PlaceOrderVaildation extends BaseTest {
+public class TC24_PlaceOrderVaildation extends BaseTest {
 
     private LoginSignupPage loginSignupPage;
     private ProductsPage productsPage;

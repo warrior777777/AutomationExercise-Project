@@ -1,12 +1,15 @@
-/*package project_automationexercise;
+package project_automationexercise;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import project_automationexercise.base.BasePage;
+import project_automationexercise.base.BaseTest;
 
-public class TC01_RegisterUserPage extends BasePage {
+import java.time.Duration;
+
+public class TC01_RegisterUserPage extends BaseTest {
 
     private final String NAME = "Automation Script";
     private final String EMAIL = "testmail7@test.com";
@@ -46,7 +49,7 @@ public class TC01_RegisterUserPage extends BasePage {
 
     @Test
     public void testRegisterUser() {
-
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(homePageVerify)).isDisplayed(),
                 "Home page is not visible");
@@ -87,5 +90,3 @@ public class TC01_RegisterUserPage extends BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(continueBtn)).click();
     }
 }
-
- */
